@@ -32,6 +32,7 @@ def get_config():
     parser.add_argument('--report_to', type=str, default=None, help='Comma-separated list of integrations to report to (e.g., "tensorboard,wandb") or "none"')
     parser.add_argument('--wandb_mode', type=str, default='offline', help='Weights & Biases mode (e.g., "online", "offline", "disabled")')
     parser.add_argument('--resume_from_checkpoint', type=str, default=None, help='Path to checkpoint to resume from')
+    parser.add_argument('--dataset-cache', type=str, default=None, help='Path to dataset cache file')
     args = parser.parse_args()
     
     # Set wandb mode before any wandb imports

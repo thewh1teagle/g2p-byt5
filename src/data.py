@@ -25,7 +25,7 @@ def load_tsv_data(file_path: str):
     return pd.DataFrame(rows)
 
 
-def prepare_dataset(df, tokenizer, max_length=MAX_LENGTH):
+def prepare_dataset(df, tokenizer, max_length=MAX_LENGTH, cache_file=None):
     def tokenize_function(examples):
         # Use dynamic padding - DataCollatorForSeq2Seq will handle padding
         model_inputs = tokenizer(
@@ -51,6 +51,8 @@ def prepare_dataset(df, tokenizer, max_length=MAX_LENGTH):
         batched=True,
         remove_columns=dataset.column_names,
         desc="Tokenizing dataset",
+        load_from_cache_file=True if cache_file else False,
+        cache_file_name=cache_file,
     )
 
 
