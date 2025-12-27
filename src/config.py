@@ -18,6 +18,7 @@ def set_random_seeds(seed):
 def get_config():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data_file', type=str, default='data.tsv')
+    parser.add_argument('--eval_file', type=str, default=None, help='Optional separate eval file (TSV). If not provided, data_file will be split into train/val')
     parser.add_argument('--model_name', type=str, default='google/byt5-large')
     parser.add_argument('--output_dir', type=str, default='./checkpoints')
     parser.add_argument('--num_epochs', type=int, default=3)

@@ -17,3 +17,10 @@ def print_samples(dataset, tokenizer, split_name="Train", num_samples=2):
         target_text = tokenizer.decode(labels, skip_special_tokens=True)
         print(f"  [{i}] Input:  '{input_text}' ({len(sample['input_ids'])} tokens)")
         print(f"  [{i}] Target: '{target_text}' ({len(sample['labels'])} tokens)")
+
+
+def print_dataset_info(train_dataset, val_dataset, tokenizer, num_samples=2):
+    """Print dataset sizes and sample examples."""
+    print(f"\n✂️  Train: {len(train_dataset)} | Val: {len(val_dataset)}")
+    print_samples(train_dataset, tokenizer, "Train", num_samples=num_samples)
+    print_samples(val_dataset, tokenizer, "Eval", num_samples=num_samples)

@@ -1,11 +1,12 @@
 """
+wget https://raw.githubusercontent.com/thewh1teagle/heb-g2p-benchmark/refs/heads/main/gt.tsv -O eval.tsv
 uv run src/train.py
 """
 from transformers import T5ForConditionalGeneration, ByT5Tokenizer, Seq2SeqTrainer, Seq2SeqTrainingArguments
 from config import get_config, MAX_LENGTH, set_random_seeds
 from data import load_tsv_data, prepare_dataset, split_dataset, create_data_collator
 from eval import create_compute_metrics
-from diagnostics import print_trainable_params, print_samples
+from diagnostics import print_trainable_params, print_dataset_info
 
 
 def main():
@@ -14,24 +15,26 @@ def main():
     # Set random seeds for reproducibility
     set_random_seeds(config.seed)
 
-    # Load and prepare data
-    df = load_tsv_data(config.data_file)
-    print(f"📊 Loaded {len(df)} examples")
+    # Load raw data files
+    train_df = load_tsv_data(config.data_file)
+    eval_df = load_tsv_data(config.eval_file) if config.eval_file else None
 
     # Load model and tokenizer
-    print(f"\n🤖 Loading model: {config.model_name}")
+    print(f"🤖 Loading model: {config.model_name}")
     tokenizer = ByT5Tokenizer.from_pretrained(config.model_name)
     model = T5ForConditionalGeneration.from_pretrained(config.model_name)
     print_trainable_params(model)
 
     # Prepare datasets
-    tokenized_dataset = prepare_dataset(df, tokenizer, max_length=MAX_LENGTH)
-    train_dataset, val_dataset = split_dataset(tokenized_dataset, seed=config.seed)
-    print(f"\n✂️  Train: {len(train_dataset)} | Val: {len(val_dataset)}")
+    if eval_df is not None:
+        train_dataset = prepare_dataset(train_df, tokenizer, max_length=MAX_LENGTH)
+        val_dataset = prepare_dataset(eval_df, tokenizer, max_length=MAX_LENGTH)
+    else:
+        dataset = prepare_dataset(train_df, tokenizer, max_length=MAX_LENGTH)
+        train_dataset, val_dataset = split_dataset(dataset, seed=config.seed)
 
-    # Print sample examples
-    print_samples(train_dataset, tokenizer, "Train", num_samples=2)
-    print_samples(val_dataset, tokenizer, "Eval", num_samples=2)
+    # Print dataset info and samples
+    print_dataset_info(train_dataset, val_dataset, tokenizer, num_samples=2)
 
     # Setup training components
     data_collator = create_data_collator(tokenizer, model)
