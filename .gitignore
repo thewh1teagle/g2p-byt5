@@ -8,4 +8,4 @@ venv/
 wandb/
 checkpoints/
 .DS_Store
-dataset.cache
+.dataset-cache
