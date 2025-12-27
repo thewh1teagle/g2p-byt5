@@ -18,6 +18,11 @@ def create_compute_metrics(tokenizer):
         # Replace -100 in labels with pad token id (they were masked for loss calculation)
         labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
 
+        # Clip predictions to valid vocab range to avoid chr() errors
+        # ByT5 vocab size is 259 (256 bytes + 3 special tokens)
+        vocab_size = tokenizer.vocab_size
+        predictions = np.clip(predictions, 0, vocab_size - 1)
+
         # Decode predictions and labels
         decoded_preds = tokenizer.batch_decode(predictions, skip_special_tokens=True)
         decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
