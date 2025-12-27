@@ -3,6 +3,7 @@ import os
 import random
 import numpy as np
 import torch
+from pathlib import Path
 from transformers import set_seed
 
 MAX_LENGTH = 128
@@ -37,5 +38,9 @@ def get_config():
     
     # Set wandb mode before any wandb imports
     os.environ['WANDB_MODE'] = args.wandb_mode
+    
+    # Convert dataset_cache to absolute path if provided
+    if args.dataset_cache:
+        args.dataset_cache = str(Path(args.dataset_cache).absolute())
     
     return args

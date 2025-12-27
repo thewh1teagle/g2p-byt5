@@ -8,7 +8,6 @@ from data import load_tsv_data, prepare_dataset, split_dataset, create_data_coll
 from eval import create_compute_metrics
 from diagnostics import print_trainable_params, print_dataset_info
 
-
 def main():
     config = get_config()
 
