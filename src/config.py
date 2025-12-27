@@ -18,7 +18,7 @@ def set_random_seeds(seed):
 def get_config():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data_file', type=str, default='data.tsv')
-    parser.add_argument('--model_name', type=str, default='google/byt5-small')
+    parser.add_argument('--model_name', type=str, default='google/byt5-large')
     parser.add_argument('--output_dir', type=str, default='./checkpoints')
     parser.add_argument('--num_epochs', type=int, default=3)
     parser.add_argument('--batch_size', type=int, default=8)

@@ -15,6 +15,9 @@ def create_compute_metrics(tokenizer):
     def compute_metrics(eval_pred):
         predictions, labels = eval_pred
 
+        # Convert logits to token IDs by taking argmax
+        predictions = np.argmax(predictions, axis=-1)
+
         # Replace -100 in labels with pad token id (they were masked for loss calculation)
         labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
 

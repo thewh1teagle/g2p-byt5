@@ -1,5 +1,5 @@
 """
-uv run src/infer.py --model_path models/byt5-small --text "היי, מה השבוע?"
+uv run src/infer.py --model_path models/byt5-large --text "היי, מה השבוע?"
 """
 from transformers import T5ForConditionalGeneration, ByT5Tokenizer
 from config import MAX_LENGTH
