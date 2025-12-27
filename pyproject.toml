@@ -1,0 +1,15 @@
+[project]
+name = "g2p-byt5"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "datasets>=4.4.2",
+    "jiwer>=4.0.0",
+    "pandas>=2.3.3",
+    "sentencepiece>=0.2.1",
+    "tqdm>=4.67.1",
+    "transformers[torch]>=4.57.3",
+    "wandb>=0.23.1",
+]
