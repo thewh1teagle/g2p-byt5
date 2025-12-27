@@ -51,7 +51,7 @@ def prepare_dataset(df, tokenizer, max_length=MAX_LENGTH, cache_file=None):
         batched=True,
         remove_columns=dataset.column_names,
         desc="Tokenizing dataset",
-        load_from_cache_file=True if cache_file else False,
+        load_from_cache_file=bool(cache_file),
         cache_file_name=cache_file,
     )
 
