@@ -71,6 +71,7 @@ def main():
         eval_dataset=val_dataset,
         data_collator=data_collator,
         compute_metrics=compute_metrics,
+        tokenizer=tokenizer,  # Required for predict_with_generate=True
     )
 
     print("\n🔥 Starting training...\n")
