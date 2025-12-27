@@ -28,4 +28,5 @@ def get_config():
     parser.add_argument('--save_total_limit', type=int, default=2, help='Limit the total number of checkpoints to save disk space')
     parser.add_argument('--seed', type=int, default=42, help='Random seed for reproducibility')
     parser.add_argument('--report_to', type=str, default=None, help='Comma-separated list of integrations to report to (e.g., "tensorboard,wandb") or "none"')
+    parser.add_argument('--resume_from_checkpoint', type=str, default=None, help='Path to checkpoint to resume from')
     return parser.parse_args()

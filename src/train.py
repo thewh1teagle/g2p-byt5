@@ -62,7 +62,7 @@ def main():
         compute_metrics=compute_metrics,
     )
 
-    trainer.train()
+    trainer.train(resume_from_checkpoint=config.resume_from_checkpoint)
     trainer.save_model()
     tokenizer.save_pretrained(config.output_dir)
 
