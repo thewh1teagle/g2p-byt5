@@ -4,7 +4,7 @@ uv run src/train.py
 from transformers import T5ForConditionalGeneration, ByT5Tokenizer, Trainer, TrainingArguments
 from config import get_config, MAX_LENGTH, set_random_seeds
 from data import load_tsv_data, prepare_dataset, split_dataset, create_data_collator
-from eval import create_compute_metrics
+from eval import create_compute_metrics, preprocess_logits_for_metrics
 from diagnostics import print_trainable_params, print_samples
 
 
@@ -66,6 +66,7 @@ def main():
         eval_dataset=val_dataset,
         data_collator=data_collator,
         compute_metrics=compute_metrics,
+        preprocess_logits_for_metrics=preprocess_logits_for_metrics,
     )
 
     print("\n🔥 Starting training...\n")

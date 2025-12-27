@@ -10,14 +10,19 @@ def calculate_cer(references, predictions):
     return jiwer.cer(references, predictions)
 
 
+def preprocess_logits_for_metrics(logits, labels):
+    """Convert logits to predictions before passing to compute_metrics."""
+    if isinstance(logits, tuple):
+        logits = logits[0]
+    return np.argmax(logits, axis=-1)
+
+
 def create_compute_metrics(tokenizer):
     """Create a compute_metrics function for the Trainer."""
     def compute_metrics(eval_pred):
         predictions, labels = eval_pred
 
-        # Convert logits to token IDs by taking argmax
-        predictions = np.argmax(predictions, axis=-1)
-
+        # Predictions are already token IDs from preprocess_logits_for_metrics
         # Replace -100 in labels with pad token id (they were masked for loss calculation)
         labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
 
