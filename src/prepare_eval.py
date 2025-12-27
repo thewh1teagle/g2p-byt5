@@ -1,5 +1,6 @@
 """
 wget https://raw.githubusercontent.com/thewh1teagle/heb-g2p-benchmark/refs/heads/main/gt.tsv -O heb-g2p-benchmark.tsv
+uv run src/prepare_eval.py
 """
 
 
