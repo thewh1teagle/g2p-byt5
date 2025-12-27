@@ -1,10 +1,10 @@
 """
 uv run src/train.py
 """
-from transformers import T5ForConditionalGeneration, ByT5Tokenizer, Trainer, TrainingArguments
+from transformers import T5ForConditionalGeneration, ByT5Tokenizer, Seq2SeqTrainer, Seq2SeqTrainingArguments
 from config import get_config, MAX_LENGTH, set_random_seeds
 from data import load_tsv_data, prepare_dataset, split_dataset, create_data_collator
-from eval import create_compute_metrics, preprocess_logits_for_metrics
+from eval import create_compute_metrics
 from diagnostics import print_trainable_params, print_samples
 
 
@@ -38,7 +38,7 @@ def main():
     compute_metrics = create_compute_metrics(tokenizer)
 
     # Configure training arguments
-    training_args = TrainingArguments(
+    training_args = Seq2SeqTrainingArguments(
         output_dir=config.output_dir,
         num_train_epochs=config.num_epochs,
         per_device_train_batch_size=config.batch_size,
@@ -56,17 +56,18 @@ def main():
         seed=config.seed,
         data_seed=config.seed,
         report_to=config.report_to,
+        predict_with_generate=True,
+        generation_max_length=MAX_LENGTH,
     )
 
     # Train model
-    trainer = Trainer(
+    trainer = Seq2SeqTrainer(
         model=model,
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=val_dataset,
         data_collator=data_collator,
         compute_metrics=compute_metrics,
-        preprocess_logits_for_metrics=preprocess_logits_for_metrics,
     )
 
     print("\n🔥 Starting training...\n")
