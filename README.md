@@ -11,6 +11,6 @@ uv run src/train.py \
     --learning_rate 1e-5 \
     --data_file data.tsv \
     --eval_file eval.tsv \
-    --eval_steps 2000 \
-    --save_steps 1000
+    --eval_steps 3000 \
+    --save_steps 2000
 ```
