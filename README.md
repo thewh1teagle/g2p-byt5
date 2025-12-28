@@ -15,3 +15,7 @@ uv run src/train.py \
     --save_steps 3000 \
     --cache_dir .cache
 ```
+
+## Benchmark
+
+See [Hebrew G2P Benchmark](https://thewh1teagle.github.io/heb-g2p-benchmark) for more details.
