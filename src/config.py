@@ -33,14 +33,20 @@ def get_config():
     parser.add_argument('--report_to', type=str, default=None, help='Comma-separated list of integrations to report to (e.g., "tensorboard,wandb") or "none"')
     parser.add_argument('--wandb_mode', type=str, default='offline', help='Weights & Biases mode (e.g., "online", "offline", "disabled")')
     parser.add_argument('--resume_from_checkpoint', type=str, default=None, help='Path to checkpoint to resume from')
-    parser.add_argument('--dataset-cache', type=str, default=None, help='Path to dataset cache file')
+    parser.add_argument('--cache_dir', type=str, default=None, help='Directory for dataset cache files')
     args = parser.parse_args()
     
     # Set wandb mode before any wandb imports
     os.environ['WANDB_MODE'] = args.wandb_mode
     
-    # Convert dataset_cache to absolute path if provided
-    if args.dataset_cache:
-        args.dataset_cache = str(Path(args.dataset_cache).absolute())
+    # Setup cache files
+    if args.cache_dir:
+        cache_path = Path(args.cache_dir)
+        cache_path.mkdir(parents=True, exist_ok=True)
+        args.train_cache = str(cache_path / 'train.arrow')
+        args.val_cache = str(cache_path / 'eval.arrow')
+    else:
+        args.train_cache = None
+        args.val_cache = None
     
     return args

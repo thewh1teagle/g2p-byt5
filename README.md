@@ -13,5 +13,5 @@ uv run src/train.py \
     --eval_file eval.tsv \
     --eval_steps 3000 \
     --save_steps 3000 \
-    --dataset-cache .dataset-cache.arrow
+    --cache_dir .cache
 ```

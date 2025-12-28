@@ -25,12 +25,11 @@ def main():
     print_trainable_params(model)
 
     # Prepare datasets
-    cache_file = config.dataset_cache
     if eval_df is not None:
-        train_dataset = prepare_dataset(train_df, tokenizer, max_length=MAX_LENGTH, cache_file=cache_file)
-        val_dataset = prepare_dataset(eval_df, tokenizer, max_length=MAX_LENGTH, cache_file=cache_file)
+        train_dataset = prepare_dataset(train_df, tokenizer, max_length=MAX_LENGTH, cache_file=config.train_cache)
+        val_dataset = prepare_dataset(eval_df, tokenizer, max_length=MAX_LENGTH, cache_file=config.val_cache)
     else:
-        dataset = prepare_dataset(train_df, tokenizer, max_length=MAX_LENGTH, cache_file=cache_file)
+        dataset = prepare_dataset(train_df, tokenizer, max_length=MAX_LENGTH, cache_file=config.train_cache)
         train_dataset, val_dataset = split_dataset(dataset, seed=config.seed)
 
     # Print dataset info and samples
