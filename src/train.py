@@ -6,7 +6,7 @@ from transformers import T5ForConditionalGeneration, ByT5Tokenizer, Seq2SeqTrain
 from config import get_config, MAX_LENGTH, set_random_seeds
 from data import load_tsv_data, prepare_dataset, split_dataset, create_data_collator
 from eval import create_compute_metrics
-from diagnostics import print_trainable_params, print_dataset_info
+from diagnostics import log_trainable_params, log_dataset_info
 
 def main():
     config = get_config()
@@ -22,7 +22,7 @@ def main():
     print(f"🤖 Loading model: {config.model_name}")
     tokenizer = ByT5Tokenizer.from_pretrained(config.model_name)
     model = T5ForConditionalGeneration.from_pretrained(config.model_name)
-    print_trainable_params(model)
+    log_trainable_params(model)
 
     # Prepare datasets
     if eval_df is not None:
@@ -33,7 +33,7 @@ def main():
         train_dataset, val_dataset = split_dataset(dataset, seed=config.seed)
 
     # Print dataset info and samples
-    print_dataset_info(train_dataset, val_dataset, tokenizer, num_samples=2)
+    log_dataset_info(train_dataset, val_dataset, tokenizer, num_samples=2)
 
     # Setup training components
     data_collator = create_data_collator(tokenizer, model)

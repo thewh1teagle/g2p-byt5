@@ -4,7 +4,7 @@ except ImportError:
     wandb = None
 
 
-def print_trainable_params(model):
+def log_trainable_params(model):
     """Print the number of trainable parameters."""
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     all_params = sum(p.numel() for p in model.parameters())
@@ -12,7 +12,7 @@ def print_trainable_params(model):
     print(f"💪 Trainable params: {trainable_params:,} / {all_params:,} ({trainable_gb:.2f} GB)")
 
 
-def print_samples(dataset, tokenizer, split_name="Train", num_samples=2):
+def log_samples(dataset, tokenizer, split_name="Train", num_samples=2):
     """Print sample examples from dataset."""
     print(f"\n📋 {split_name} Samples:")
     for i in range(min(num_samples, len(dataset))):
@@ -25,14 +25,14 @@ def print_samples(dataset, tokenizer, split_name="Train", num_samples=2):
         print(f"  [{i}] Target: '{target_text}' ({len(sample['labels'])} tokens)")
 
 
-def print_dataset_info(train_dataset, val_dataset, tokenizer, num_samples=2):
+def log_dataset_info(train_dataset, val_dataset, tokenizer, num_samples=2):
     """Print dataset sizes and sample examples."""
     print(f"\n✂️  Train: {len(train_dataset)} | Val: {len(val_dataset)}")
-    print_samples(train_dataset, tokenizer, "Train", num_samples=num_samples)
-    print_samples(val_dataset, tokenizer, "Eval", num_samples=num_samples)
+    log_samples(train_dataset, tokenizer, "Train", num_samples=num_samples)
+    log_samples(val_dataset, tokenizer, "Eval", num_samples=num_samples)
 
 
-def check_vocab_range(predictions, vocab_size):
+def log_vocab_range(predictions, vocab_size):
     """Check if predictions are within valid vocab range."""
     out_of_vocab = (predictions < 0) | (predictions >= vocab_size)
     if out_of_vocab.any():
@@ -40,7 +40,7 @@ def check_vocab_range(predictions, vocab_size):
         print(f"   Min: {predictions.min()}, Max: {predictions.max()}, Vocab size: {vocab_size}")
 
 
-def print_eval_predictions(decoded_preds, decoded_labels, num_samples=5):
+def log_eval_predictions(decoded_preds, decoded_labels, num_samples=5):
     """Print evaluation predictions for debugging."""
     print("\n" + "="*80)
     print("📝 EVALUATION SAMPLES")
