@@ -1,3 +1,9 @@
+try:
+    import wandb
+except ImportError:
+    wandb = None
+
+
 def print_trainable_params(model):
     """Print the number of trainable parameters."""
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -66,3 +72,19 @@ def print_eval_predictions(decoded_preds, decoded_labels, num_samples=5):
     print("\n" + "="*80)
     print(f"📊 Exact Match: {accuracy:.2f}% ({exact_matches}/{total})")
     print("="*80 + "\n")
+
+    # Log examples to wandb
+    if wandb and wandb.run is not None:
+        examples = []
+        for i in range(min(num_samples, len(decoded_preds))):
+            examples.append([
+                decoded_labels[i],  # Target
+                decoded_preds[i],   # Prediction
+                "✓" if decoded_preds[i] == decoded_labels[i] else "✗"  # Match
+            ])
+        wandb.log({
+            "eval_examples": wandb.Table(
+                columns=["Target", "Prediction", "Match"],
+                data=examples
+            )
+        })
