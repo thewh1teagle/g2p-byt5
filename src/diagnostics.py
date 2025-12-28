@@ -24,3 +24,45 @@ def print_dataset_info(train_dataset, val_dataset, tokenizer, num_samples=2):
     print(f"\n✂️  Train: {len(train_dataset)} | Val: {len(val_dataset)}")
     print_samples(train_dataset, tokenizer, "Train", num_samples=num_samples)
     print_samples(val_dataset, tokenizer, "Eval", num_samples=num_samples)
+
+
+def check_vocab_range(predictions, vocab_size):
+    """Check if predictions are within valid vocab range."""
+    out_of_vocab = (predictions < 0) | (predictions >= vocab_size)
+    if out_of_vocab.any():
+        print(f"⚠️  WARNING: {out_of_vocab.sum()} tokens out of vocab range!")
+        print(f"   Min: {predictions.min()}, Max: {predictions.max()}, Vocab size: {vocab_size}")
+
+
+def print_eval_predictions(decoded_preds, decoded_labels, num_samples=5):
+    """Print evaluation predictions for debugging."""
+    print("\n" + "="*80)
+    print("📝 EVALUATION SAMPLES")
+    print("="*80)
+
+    for i in range(min(num_samples, len(decoded_preds))):
+        pred = decoded_preds[i]
+        label = decoded_labels[i]
+        match = pred == label
+        symbol = "✓" if match else "✗"
+
+        print(f"\n{symbol} Example {i+1}:")
+        print(f"  Target: {repr(label)}")
+        print(f"  Pred:   {repr(pred)}")
+
+        if not match:
+            print(f"  Length: Target={len(label)}, Pred={len(pred)}")
+            # Show first difference
+            for j, (t, p) in enumerate(zip(label, pred)):
+                if t != p:
+                    print(f"  First diff at pos {j}: '{t}' vs '{p}'")
+                    break
+
+    # Calculate and print summary
+    exact_matches = sum(1 for p, l in zip(decoded_preds, decoded_labels) if p == l)
+    total = len(decoded_preds)
+    accuracy = exact_matches / total * 100
+
+    print("\n" + "="*80)
+    print(f"📊 Exact Match: {accuracy:.2f}% ({exact_matches}/{total})")
+    print("="*80 + "\n")

@@ -1,5 +1,6 @@
 import numpy as np
 import jiwer
+from diagnostics import print_eval_predictions, check_vocab_range
 
 
 def calculate_wer(references, predictions):
@@ -18,14 +19,20 @@ def create_compute_metrics(tokenizer):
         # Replace -100 in labels with pad token id (they were masked for loss calculation)
         labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
 
+        # Check for out-of-vocab predictions
+        vocab_size = tokenizer.vocab_size
+        check_vocab_range(predictions, vocab_size)
+
         # Clip predictions to valid vocab range to avoid chr() errors
         # ByT5 vocab size is 259 (256 bytes + 3 special tokens)
-        vocab_size = tokenizer.vocab_size
         predictions = np.clip(predictions, 0, vocab_size - 1)
 
         # Decode predictions and labels
         decoded_preds = tokenizer.batch_decode(predictions, skip_special_tokens=True)
         decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
+
+        # Print evaluation samples for debugging
+        print_eval_predictions(decoded_preds, decoded_labels, num_samples=5)
 
         # Calculate WER and CER
         wer = calculate_wer(decoded_labels, decoded_preds)
